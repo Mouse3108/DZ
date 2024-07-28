@@ -1,0 +1,103 @@
+--1. Запрос на получение информации о ресторане:
+--Получить название, адрес и контактный телефон ресторана с идентификатором 1.
+
+SELECT Name AS 'название', Address AS 'адрес', Phone AS 'телефон'
+FROM Restaurant
+WHERE RestaurantID = 1;
+
+
+--2. Запрос на выборку доступных столов:
+--Получить номера и вместимость столов, доступных для бронирования в ресторане с идентификатором 2.
+
+SELECT TableID AS 'номер столика', Capacity AS 'вместимость столика'
+FROM Tables
+WHERE RestaurantID = 2 AND IsAvailable = 1;
+
+
+--3. Запрос на получение списка бронирований для ресторана:
+--Получить информацию о бронированиях, включая идентификатор бронирования, 
+--имя клиента, номер столика и время бронирования для столов из ресторана с идентификатором 3.
+
+SELECT ReservationID AS 'идентификатор', 
+       Name AS 'имя клиента', 
+       TableID AS 'номер столика', 
+       ReservationTime AS 'время бронирования'
+FROM Reservations r
+JOIN Customers c ON c.CustomerID = r.CustomerID
+JOIN Tables t ON r.TableID = t.TableID AND t.RestaurantID = 3;
+
+
+--4. Запрос на получение списка официантов для ресторана:
+--Получить идентификатор и имя официантов, работающих в ресторане с идентификатором 4.
+
+SELECT WaiterID AS 'идентификатор', Name AS 'имя официанта'
+FROM Waiters
+WHERE RestaurantID = 4;
+
+
+--5. Запрос на обновление данных о столике:
+--Изменить статус доступности столика с номером 5 на "недоступен".
+
+UPDATE Tables 
+SET isAvailable = 0
+WHERE TableID = 5;
+
+
+--6. Запрос на удаление клиента из базы данных:
+--Удалить информацию о клиенте с идентификатором 6 из базы данных.
+
+DELETE FROM Reservations 
+WHERE CustomerID = 6;
+DELETE FROM Customers 
+WHERE CustomerID = 6;
+-- И вернула записи обратно после удаления:
+/*INSERT INTO Customers (CustomerID, Name, Email, Phone)
+VALUES(6, 'Olivia Miller', 'oliviamiller@email.com', '+6667778889');
+INSERT INTO Reservations (ReservationID, TableID, CustomerID, ReservationTime)
+VALUES(6, 6, 6, '2023-12-17 18:30:00');*/
+
+
+--7. Запрос на получение информации о бронировании по идентификатору:
+--Получить все данные о бронировании с идентификатором 7.
+
+SELECT rs.ReservationID AS '№ бронирования', 
+       rs.ReservationTime AS 'время', 
+       c.Name AS 'имя клиента',
+       c.Phone AS 'телефон клиента', 
+       rt.Name AS 'ресторан', 
+       rt.Address AS 'адрес ресторана',
+       t.TableID AS 'номер столика',
+       t.Capacity AS 'вместимость столика',
+       w.Name AS 'официант'
+--или SELECT * - для получения полностью всей информации из всех таблиц, тогда часть столбиков будет дублироваться
+FROM Reservations rs
+JOIN Customers c ON rs.CustomerID = c.CustomerID
+JOIN Tables t ON rs.TableID = t.TableID
+JOIN Restaurant rt ON t.RestaurantID = rt.RestaurantID
+JOIN Waiters w ON rt.RestaurantID = w.RestaurantID
+WHERE rs.ReservationID = 7;
+
+
+--8. Запрос на подсчет количества столов в ресторане:
+--Получить общее количество столов в ресторане с идентификатором 8.
+
+SELECT COUNT(TableID) AS 'количество столов'
+FROM Tables t
+JOIN Restaurant r ON t.RestaurantID = r.RestaurantID AND r.RestaurantID = 8;
+
+
+--9. Запрос на выборку столов по вместимости:
+--Получить номера и вместимость столов, вместимость которых больше или равна 6.
+
+SELECT TableID AS 'номер столика', Capacity AS 'вместимость столика'
+FROM Tables
+WHERE Capacity >= 6;
+
+
+--10. Запрос на поиск информации о клиенте по имени:
+--Найти всех клиентов, имя которых содержит "John".
+
+SELECT *
+FROM Customers
+WHERE Name LIKE '%John%';
+
