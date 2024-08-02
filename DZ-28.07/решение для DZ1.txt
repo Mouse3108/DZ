@@ -1,0 +1,81 @@
+-- 1. «апрос на получение всех студентов и курсов, на которые они записаны
+
+SELECT first_name, last_name, date_of_birth, course_name, description
+FROM Enrollments e
+JOIN Courses c ON c.id = e.course_id
+RIGHT JOIN Students s ON s.id = e.student_id
+ORDER BY 1;
+
+
+-- 2. «апрос на получение всех курсов и преподавателей, которые их преподают
+
+SELECT course_name, description, first_name, last_name, department, class_date, classroom
+FROM Teachers t
+JOIN Schedule s ON t.id = s.teacher_id
+JOIN Courses c ON c.id = s.course_id;
+
+
+-- 3. «апрос на получение всех записей студентов на курсы и их оценок
+
+SELECT first_name, last_name, course_name, description, grade
+FROM Enrollments e
+JOIN Courses c ON c.id = e.course_id
+JOIN Students s ON s.id = e.student_id;
+
+
+-- 4. «апрос на получение всех преподавателей и курсов, которые они ведут, включа€ курсы без преподавателей
+
+--вроде бы в таблице "расписание" нет курсов без преподавателей? »ли € не совсем правильно пон€ла это задание?
+SELECT first_name, last_name, department, course_name, description, class_date, classroom
+FROM Courses c
+JOIN Schedule s ON c.id = s.course_id
+LEFT JOIN Teachers t ON t.id = s.teacher_id;
+
+
+-- 5. «апрос на получение всех курсов и студентов, записанных на них, включа€ курсы без студентов
+
+SELECT course_name, description, first_name, last_name
+FROM Students s
+RIGHT JOIN Enrollments e ON s.id = e.student_id
+LEFT JOIN Courses c ON c.id = e.course_id;
+
+
+-- 6. «апрос на получение всех студентов и курсов, на которые они записаны, включа€ студентов без записей на курсы
+
+SELECT first_name, last_name, course_name, description
+FROM Enrollments e
+RIGHT JOIN Students s ON s.id = e.student_id
+LEFT JOIN Courses c ON c.id = e.course_id;
+
+
+-- 7. «апрос на получение всех курсов и расписани€ зан€тий по ним
+
+SELECT course_name, description, class_date, classroom
+FROM Courses c
+JOIN Schedule s ON c.id = s.course_id;
+
+
+-- 8. «апрос на получение всех студентов и их оценок по курсам, включа€ студентов без оценок
+
+SELECT first_name, last_name, course_name, grade
+FROM Enrollments e
+JOIN Courses c ON c.id = e.course_id
+RIGHT JOIN Students s ON s.id = e.student_id;
+
+
+-- 9. «апрос на получение всех курсов и преподавателей, которые их ведут, включа€ курсы без преподавателей
+
+-- то же вопрос, что и в запросе є 4
+SELECT  course_name, description, class_date, classroom, first_name, last_name, department
+FROM Courses c
+JOIN Schedule s ON c.id = s.course_id
+LEFT JOIN Teachers t ON t.id = s.teacher_id;
+
+
+-- 10. «апрос на получение всех преподавателей и курсов, которые они ведут, включа€ преподавателей без курсов
+
+SELECT first_name, last_name, department, course_name, description, class_date, classroom
+FROM Schedule s
+JOIN Courses c ON c.id = s.course_id
+RIGHT JOIN Teachers t ON t.id = s.teacher_id 
+WHERE t.first_name != '';

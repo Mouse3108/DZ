@@ -1,0 +1,211 @@
+-- Задача:
+-- Описание базы данных
+
+-- Таблица 1: Пользователи (Users)
+-- Содержит информацию о пользователях системы. 
+-- Включает уникальные идентификаторы, имена пользователей, электронные почты и пароли. 
+-- Также фиксируется время создания каждой записи.
+
+CREATE TABLE Users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Users (user_name, email, password) VALUES
+('Пользователь 1', 'user1@mail.ru', '11111111'),
+('Пользователь 2', 'user2@mail.ru', '22222222'),
+('Пользователь 3', 'user3@mail.ru', '33333333'),
+('Пользователь 4', 'user4@mail.ru', '44444444'),
+('Пользователь 5', 'user5@mail.ru', '55555555');
+
+
+-- Таблица 2: Профили (Profiles)
+-- Хранит подробные данные профилей пользователей. 
+-- Связана с таблицей пользователей. 
+-- Содержит информацию, такую как имя, фамилия и дата рождения. Включает дату и время создания записи.
+
+CREATE TABLE Profiles (
+    user_id INTEGER,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    date_of_birth DATE NOT NULL,
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+INSERT INTO Profiles (user_id, first_name, last_name, date_of_birth) VALUES
+(1, 'Имя 1', 'Фамилия 1', '2000-01-01'),
+(2, 'Имя 2', 'Фамилия 2', '2000-02-05'),
+(3, 'Имя 3', 'Фамилия 3', '2000-03-10'),
+(4, 'Имя 4', 'Фамилия 4', '2000-04-15'),
+(5, 'Имя 5', 'Фамилия 5', '2000-05-20');
+
+
+-- Таблица 3: Посты (Posts)
+-- Содержит записи о постах, создаваемых пользователями. 
+-- Связана с таблицей пользователей. 
+-- Включает уникальные идентификаторы, заголовки и содержание постов. Также фиксируется время создания постов.
+
+CREATE TABLE Posts (    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    category_id INTEGER,
+    title TEXT,
+    content TEXT,
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    FOREIGN KEY (user_id) REFERENCES Users(id),
+    FOREIGN KEY (category_id) REFERENCES Categories(id)
+);
+
+INSERT INTO Posts (user_id, category_id, title, content) VALUES
+(1, 1, 'Заголовок 1', 'Содержание'),
+(1, 2, 'Заголовок 2', 'Содержание'),
+(1, 3, 'Заголовок 3', 'Содержание'),
+(2, 1, 'Заголовок 4', 'Содержание'),
+(2, 2, 'Заголовок 5', 'Содержание'),
+(2, 2, 'Заголовок 6', 'Содержание'),
+(3, 2, 'Заголовок 7', 'Содержание'),
+(3, 3, 'Заголовок 8', 'Содержание'),
+(5, 1, 'Заголовок 9', 'Содержание'),
+(NULL, 2, 'Заголовок 10', 'Содержание');
+
+
+-- Таблица 4: Комментарии (Comments)
+-- Содержит данные о комментариях к постам. 
+-- Связана с таблицами постов и пользователей. 
+-- Включает уникальные идентификаторы, текст комментария и время его создания.
+
+CREATE TABLE Comments (    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER,
+    user_id INTEGER,
+    comment TEXT,
+    date_of_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    
+    FOREIGN KEY (user_id) REFERENCES Users(id),
+    FOREIGN KEY (post_id) REFERENCES Posts(id)
+);
+
+INSERT INTO Comments (post_id, user_id, comment) VALUES
+(1, 1, 'Комментарий 1'),
+(1, 2, 'Комментарий 2'),
+(3, 3, 'Комментарий 3'),
+(3, 4, 'Комментарий 4'),
+(3, 1, 'Комментарий 5'),
+(5, 2, 'Комментарий 6'),
+(7, 3, 'Комментарий 7'),
+(8, 4, 'Комментарий 8'),
+(9, 1, 'Комментарий 9'),
+(10, 2, 'Комментарий 10');
+
+
+-- Таблица 5: Категории (Categories)
+-- Хранит информацию о категориях постов. 
+-- Включает уникальные идентификаторы и названия категорий. 
+-- Связана с таблицей постов.
+
+CREATE TABLE Categories (    
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category TEXT
+);
+
+INSERT INTO Categories (category) VALUES
+('Категория 1'),
+('Категория 2'),
+('Категория 3');
+
+
+-- ЗАПРОСЫ:
+-- 1. Запрос на получение всех пользователей вместе с их профилями
+
+SELECT user_name, email, password, first_name, last_name, date_of_birth, Users.date_of_creation
+FROM Users
+JOIN Profiles ON id = user_id;
+
+
+-- 2. Запрос на получение всех постов и их авторов
+
+SELECT title, content, u.date_of_creation, user_name
+FROM Posts p
+JOIN Users u ON u.id = p.user_id;
+
+
+-- 3. Запрос на получение всех комментариев вместе с постами, к которым они относятся
+
+SELECT comment, c.date_of_creation AS date_of_comment, title, content, p.date_of_creation AS date_of_post
+FROM Comments c
+JOIN Posts p ON p.id = c.post_id;
+
+
+-- 4. Запрос на получение всех постов и их категорий
+
+SELECT title, content, date_of_creation, category
+FROM Posts p
+JOIN Categories c ON c.id = p.category_id;
+
+
+-- 5. Запрос на получение всех пользователей и их постов, включая пользователей, у которых нет постов
+
+SELECT user_name, title, content, p.date_of_creation
+FROM Posts p
+RIGHT JOIN Users u ON u.id = p.user_id;
+
+-- или количество постов у пользователей:
+
+SELECT user_name, COUNT(title) AS posts
+FROM Posts p
+RIGHT JOIN Users u ON u.id = p.user_id
+GROUP BY 1;
+
+
+-- 6. Запрос на получение всех постов и их комментариев, включая посты без комментариев
+
+SELECT title, content, p.date_of_creation, comment, c.date_of_creation
+FROM Posts p
+LEFT JOIN Comments c ON p.id = c.post_id;
+
+-- или количество комментариев у постов:
+
+SELECT title, content, COUNT(comment) AS comments
+FROM Posts p
+LEFT JOIN Comments c ON p.id = c.post_id
+GROUP BY 1
+ORDER BY 3 DESC;
+
+
+-- 7. Запрос на получение всех категорий и постов в каждой категории
+
+SELECT category, title, content, date_of_creation
+FROM Categories c
+JOIN Posts p ON c.id = p.category_id
+ORDER BY 1; 
+
+-- или количество постов в каждой категории:
+
+SELECT category, COUNT(content) AS posts
+FROM Categories c
+JOIN Posts p ON c.id = p.category_id
+GROUP BY 1; 
+
+
+-- 8. Запрос на получение всех комментариев и информации о постах, к которым они относятся, включая посты без комментариев
+
+SELECT comment, c.date_of_creation AS date_of_comment, title, content, p.date_of_creation AS date_of_post
+FROM Posts p
+LEFT JOIN Comments c ON p.id = c.post_id;
+
+
+-- 9. Запрос на получение всех пользователей и их комментариев, включая пользователей, которые не оставляли комментарии
+
+SELECT user_name, comment, c.date_of_creation
+FROM Users u
+LEFT JOIN Comments c ON u.id = c.user_id;
+
+
+-- 10. Запрос на получение всех постов и профилей их авторов, включая посты без профилей авторов
+
+SELECT title, content, p.date_of_creation, first_name, last_name, date_of_birth
+FROM Posts p
+LEFT JOIN Profiles pr ON p.user_id = pr.user_id;
