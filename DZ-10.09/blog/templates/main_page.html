@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Блог{% endblock %}</title>
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/page_style.css' %}" />
+    {% endblock %}
+  </head>
+  <body>
+    <header>{% block header %}"БЛОГ"{% endblock %}</header>
+    <form>{% block form %}
+        <fieldset>
+            <legend style="text-align: left">ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ:</legend>
+            <input type="text" id="name" name="name" placeholder="Логин">
+            <input class="short" type="password" id="password" name="password" placeholder="Пароль">
+            <button>ВОЙТИ</button> <button>ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        </fieldset>
+    {% endblock %}</form>
+    <main>
+      <a href="{% url 'main_page' %}"><h3>Вернутся на главную страницу</h3></a>
+      {% block content %}{% endblock %}
+      <button><a href="{% url 'all_article' %}" style="color: inherit; text-decoration: none;">ВСЕ СТАТЬИ</a></button>
+      <button><a href="{% url 'add_article' %}" style="color: inherit; text-decoration: none;">ДОБАВИТЬ СТАТЬЮ</a></button>
+    </main>
+  </body>
+</html>

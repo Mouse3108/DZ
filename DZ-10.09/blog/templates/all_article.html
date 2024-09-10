@@ -1,0 +1,12 @@
+{% extends "main_page.html" %}
+{% block content %}
+    {% for article in articles%}
+        <hr>
+        <a href="{% url 'article_detail' article.id %}"><p>Статья № {{article.id}}: {{ article.title }}</p></a>
+        <p style="display: inline-block">Теги:</p>
+        {%for hashtag in article.hashtags %}
+            <p class='hashtag'>{{hashtag}}</p>
+        {% endfor %}
+        <hr>
+    {% endfor %}
+{% endblock %}
