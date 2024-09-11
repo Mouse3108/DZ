@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+    <p><a href="{% url 'main_page' %}">Вернуться на главную страницу</a></p>
+    {% for book in books %}
+        <div class="container">
+            <img class="image" src="{% static 'images/book.jpg' %}" alt="КНИГА">
+            <div class="text">
+                <p>Название: "{{book.title}}"</p>
+                <p>Год публикации: {{book.publish_year}}</p>
+                {% if book.is_bestseller == True %}
+                    <span style="color: red">Бестселлер!</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

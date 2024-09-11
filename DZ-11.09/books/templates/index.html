@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Книги{% endblock %}</title>
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/book_style.css' %}" />
+    {% endblock %}
+</head>
+<body>
+    <header>
+        {% block header %}
+        <h1>БИБЛИОТЕКА</h1>
+        <hr>
+        {% endblock %}
+    </header>
+    <main>
+        {% block content %}
+        <p><a href="{% url 'all_books' %}">Посмотреть список книг</a></p>
+        <img src="{% static 'images/books.jpg' %}" alt="КНИГИ">
+        {% endblock %}
+    </main>
+    <footer>
+        {% block footer %}
+        <span>*** домашнее задание на 11.09.2024 ***</span>
+        {% endblock %}
+    </footer>
+</body>
+</html>
