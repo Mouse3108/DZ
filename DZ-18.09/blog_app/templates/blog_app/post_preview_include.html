@@ -1,0 +1,24 @@
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">
+            {% if post.is_published %}
+            <span class="text-success">Опубликовано</span>
+            {% else %}
+            <span class="text-danger">Не опубликовано</span>
+            {% endif %}
+        </p>
+        <p class="card-text">Теги:
+            {% for hashtag in post.hashtags %}
+            <span class="badge text-bg-info">{{ hashtag }}</span>
+            {% endfor %}
+        </p>
+        <p class="card-text">Просмотры:
+            <span class="badge text-bg-info">{{ post.views }}</span>
+        </p>
+        <p class="card-text">Лайки:
+            <span class="badge text-bg-info">{{ post.likes }}</span>
+        </p>
+        <a href="{% url 'post_by_slug' post.slug %}" class="btn btn-primary">Подробнее</a>
+    </div>
+</div>

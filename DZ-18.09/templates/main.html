@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/body.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Главная страница</h1>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Неопубликованные посты
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        {% for post in posts %}
+          {% if post.is_published == False %}
+            {% include 'blog_app/post_preview_include.html' %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        Популярные статьи
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        {% for post in posts %}
+          {% if post.views > 5000 %}
+            {% include 'blog_app/post_preview_include.html' %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+        Основные теги
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">"python", "django"</div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
