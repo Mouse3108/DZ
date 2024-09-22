@@ -1,0 +1,22 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+body {
+  background-color: #b3e7f8;
+}
+main {
+  flex: 1;
+}
+footer {
+  background-color: #6aabc3;
+  color: #003366;
+  padding: 20px;
+  text-align: center;
+}
+.my-style-nav {
+  background-color: #6aabc3;
+  color: #003366;
+}

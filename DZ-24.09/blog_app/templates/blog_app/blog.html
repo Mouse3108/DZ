@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/my_style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="text-center mb-4">Список постов</h1>
+  <ul class="pagination">
+    {% if posts.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Предыдущая">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% endif %}
+    {% for num in posts.paginator.page_range %}
+      <li class="page-item {% if posts.number == num %}active{% endif %}">
+        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+      </li>
+    {% endfor %}
+    {% if posts.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Следующая">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+  {% for post in posts %}
+    {% include 'blog_app/post_preview_include.html' %}
+  {% endfor %}
+</div>
+{% endblock %}

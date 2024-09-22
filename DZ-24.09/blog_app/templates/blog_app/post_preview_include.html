@@ -1,0 +1,20 @@
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text fw-bold">Автор:
+            <span class="badge" style="background-color: #cce5ff; color: #003366;">{{ post.author.username }}</span>
+        </p>
+        <p class="card-text fw-bold">Категория:
+            <span class="badge" style="background-color: #cce5ff; color: #003366;">{{ post.data.category }}</span>
+        </p>
+        <p class="card-text fw-bold">Теги:
+            {% for tag in post.data.tags %}
+            <span class="badge" style="background-color: #cce5ff; color: #003366;">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        <p class="card-text fw-bold">Просмотры:
+            <span class="badge" style="background-color: #cce5ff; color: #003366;">{{ post.views }}</span>
+        </p>
+        <a href="{% url 'post_by_slug' post.slug %}" class="btn btn-primary">Посмотреть детально</a>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1>{{ post.title }}</h1>
+  <table class="table">
+  <tbody>
+    <tr>
+      <th scope="row">Автор:</th>
+      <td>{{ post.author.username }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Текст поста:</th>
+      <td>{{ post.text }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Категория:</th>
+      <td>{{ post.data.category }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Теги:</th>
+      <td>{% for tag in post.data.tags %}
+        <p>{{ tag }}</p>
+      {% endfor %}</td>
+    </tr>
+    <tr>
+      <th scope="row">Просмотры:</th>
+      <td colspan="2">{{ post.views }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Опубликован:</th>
+      <td colspan="2">{{ post.published_date }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Обновлен:</th>
+      <td colspan="2">{{ post.updated_date }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}
