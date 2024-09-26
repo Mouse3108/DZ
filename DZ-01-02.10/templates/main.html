@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/my_style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Главная страница</h1>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 class="text-center mb-2">Категории</h3>
+            <ul class="list-group rounded p-3" style="border: 1px solid #6aabc3;">
+                {% for category in categories|dictsort:"name" %}
+                    <li class="list-group-item">
+                        <span class="badge text-bg-info">
+                            <a href="{% url 'category_detail' category.slug %}" style="text-decoration: none; color: inherit;">{{ category.name }}</a>
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="text-center mb-2">Последние посты</h3>
+                    <div class="accordion accordion-flush" id="unpublishedPosts">
+                        {% for post in posts|dictsortreversed:"id"|slice:":3" %}
+                            {% include 'blog_app/post_preview_include.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-center mb-2">Популярные статьи</h3>
+                    <div class="accordion accordion-flush" id="popularPosts">
+                        {% for post in posts|dictsortreversed:"views"|slice:":3" %}
+                            {% include 'blog_app/post_preview_include.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <h3 class="text-center mb-2">Теги</h3>
+                <ul class="list-group rounded p-3" style="border: 1px solid #6aabc3;">
+                    {% for tag in tags|dictsort:"name" %}
+                        <li class="list-group-item">
+                            <span class="badge text-bg-info">
+                                <a href="{% url 'tag_detail' tag.slug %}" style="text-decoration: none; color: inherit;">#{{ tag.name }}</a>
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
