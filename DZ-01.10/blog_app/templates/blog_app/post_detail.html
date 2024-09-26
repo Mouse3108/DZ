@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load md_to_html %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1>{{ post.title }}</h1>
+  <div class="d-flex">
+    {% if post.cover_image %}
+      <img src="{{ post.cover_image.url }}" alt="Картинка" class="img-fluid me-3" style="max-width: 250px; max-height: 250px;">
+  {% endif %}
+    <table class="table">
+    <tbody>
+      <tr>
+        <th scope="row">Автор:</th>
+        <td>{{ post.author.username }}</td>
+      </tr>
+      {% if post.status == 'published' %}
+      <tr>
+        <th scope="row">Текст поста:</th>
+        <td>{% md_to_html post.text %}</td>
+      </tr>
+      {% endif %}
+      <tr>
+        <th scope="row">Категория:</th>
+        <td><a href="{% url 'category_detail' post.category.slug %}">{{ post.category.name }}</a></td>
+      </tr>
+      <tr>
+        <th scope="row">Теги:</th>
+        <td>{% for tag in post.tags.all %}
+          <p><a href="{% url 'tag_detail' tag.slug %}">{{ tag.name }}</a></p>
+        {% endfor %}</td>
+      </tr>
+      <tr>
+        <th scope="row">Статус:</th>
+        <td>{{ post.get_status_display }}</td>
+      </tr>
+    {% if post.status == 'published' %}
+      <tr>
+        <th scope="row">Просмотры:</th>
+        <td colspan="2">{{ post.views }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Опубликован:</th>
+        <td colspan="2">{{ post.published_date }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Обновлен:</th>
+        <td colspan="2">{{ post.updated_date }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Комментарии:</th>
+        <td>
+          {% for comment in comments %}
+          {% if comment.status == 'approved' %}
+            <p><strong>{{ comment.author.username }}</strong>: "{{ comment.text }}"</p>
+          {% elif comment.status == 'unchecked' %}
+            <p><strong>{{ comment.author.username }}</strong>: <span style="color: red">~~~комментарий проверяет администратор~~~</span></p>
+          {% else %}
+            <p><strong>{{ comment.author.username }}</strong>: <span style="color: red">~~~комментарий удален администратором~~~</span></p>
+          {% endif %}
+          {% endfor %}
+        </td>
+</tr>
+    {% else %}
+      <tr>
+        <th scope="row">Текст:</th>
+        <td colspan="2">
+          <span style="color: red">~~~Пост на редактировании. Вы сможете ознакомиться с ним после публикации~~~</span>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+    </table>
+  </div>
+  {% if post.status == 'published' %}
+  <div class="container justify-content-center">
+  <div class="col-15">
+    <h5>Добавить комментарий:</h5>
+    {% if message %}
+    <p class="alert alert-success">{{ message }}</p>
+    {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+      <select class="form-select" aria-label="author" id="author" name="author">
+      <option selected>Выберите пользователя</option>
+        {% for user in users%}
+          <option value="{{ user.id }}" >{{ user.username }}</option>
+        {% endfor %}
+      </select>
+        <div class="mb-3">
+          <label for="text" class="form-label">Ваш комментарий:</label>
+          <input type="text" class="form-control" id="text" name="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+  </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
