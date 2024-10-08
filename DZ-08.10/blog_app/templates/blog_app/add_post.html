@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container justify-content-center">
+  <div class="col-15">
+    <h1>Добавить пост</h1>
+    {% if message %}
+    <p class="alert alert-success">{{ message }}</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="title" class="form-label"><strong>Заголовок поста:</strong></label>
+          <input type="text" class="form-control" name="title" id="title">
+        </div>
+        <div class="mb-3">
+          <label for="text" class="form-label"><strong>Текст поста:</strong></label>
+          <textarea class="form-control" id="text" name="text" rows="8"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="author" class="form-label"><strong>Автор поста:</strong></label>
+            <select class="form-select" aria-label="author" id="author" name="author">
+                <option selected><strong>Выберите пользователя</strong></option>
+                    {% for user in users%}
+                        <option value="{{ user.id }}" >{{ user.username }}</option>
+                    {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label"><strong>Категория:</strong></label>
+          <input type="text" class="form-control" id="category" name="category">
+        </div>
+        <div class="mb-3">
+            <label for="tags" class="form-label"><strong>Теги:</strong></label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="перечислите теги через запятую">
+        </div>
+        <div class="mb-3">
+            <label for="cover_image" class="form-label"><strong>Обложка:</strong></label>
+            <input type="file" class="form-control" id="cover_image" name="cover_image">
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin: 0px 0px 20px 0px">Отправить</button>
+      </form>
+  </div>
+</div>
+{% endblock %}

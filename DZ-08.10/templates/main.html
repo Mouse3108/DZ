@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Главная страница
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/my_style.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Главная страница</h1>
+    {% include 'blog_app/search_form.html' %}
+    <div class="row">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="text-center mb-2">Последние посты</h3>
+                    <div class="accordion accordion-flush" id="unpublishedPosts">
+                        {% for post in posts|dictsortreversed:"id"|slice:":3" %}
+                            {% include 'blog_app/post_preview_include.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-center mb-2">Популярные статьи</h3>
+                    <div class="accordion accordion-flush" id="popularPosts">
+                        {% for post in posts|dictsortreversed:"views"|slice:":3" %}
+                            {% include 'blog_app/post_preview_include.html' %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}
