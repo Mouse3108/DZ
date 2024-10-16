@@ -1,0 +1,35 @@
+{% if post.status == 'published' %}
+  <div class="container justify-content-center">
+  <div class="col-15">
+      <h5>Комментарии:</h5>
+      <table class="table">
+      <tbody>
+      {% for comment in comments %}
+            <tr>
+                <th scope="row">{{ comment.author.username}}:</th>
+                <td>{{ comment.text }}</td>
+            </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      <h5>Добавить комментарий:</h5>
+      {% if message %}
+      <p class="alert alert-success">{{ message }}</p>
+      {% endif %}
+      <form method="POST">
+        {% csrf_token %}
+        <select class="form-select" aria-label="author" id="author" name="author">
+        <option selected>Выберите пользователя</option>
+            {% for user in users%}
+                <option value="{{ user.id }}" >{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <div class="mb-3">
+          <label for="text" class="form-label">Ваш комментарий:</label>
+          <input type="text" class="form-control" id="text" name="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+      </form>
+  </div>
+  </div>
+{% endif %}
