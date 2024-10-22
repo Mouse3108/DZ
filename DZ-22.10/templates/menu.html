@@ -1,0 +1,24 @@
+{% load static %}
+{% block nav %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary py-3" style="color: #003366 !important; background-color: #6aabc3 !important;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'images/logo.png' %}" alt="ЛОГОТИП" style="height: 60px;">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul class="navbar-nav fs-4">
+        {% for item in menu %}
+        <li class="nav-item mx-3">
+          <a class="nav-link
+          {% if item.alias == page_alias %}
+          active fw-bold
+          {% endif %}"
+          style="{% if item.alias == page_alias %} color: #001133 !important; {% endif %}"
+          href="{% url item.alias %}">{{ item.name }}</a>
+        </li>
+          {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}

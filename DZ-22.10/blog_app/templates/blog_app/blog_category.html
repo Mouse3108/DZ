@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Блог
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/my_style1.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="text-center mb-4">Список постов с категорией <span class="badge text-bg-info">{{ category.name }}</span></h1>
+  {% with page_obj=posts %}
+    {% if page_obj.has_other_pages %}
+      {% include 'blog_app/pagination_include.html' %}
+    {% endif %}
+  {% endwith %}
+  <div class="row">
+    {% for post in posts %}
+      <div class="col-md-6">
+        {% include 'blog_app/post_preview_include.html' %}
+      </div>
+      {% if forloop.counter|divisibleby:2 %}
+        </div><div class="row">
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
