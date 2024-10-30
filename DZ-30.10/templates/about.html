@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load md_to_html %}
+
+{% block title %}
+О проекте
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% md_to_html dz.text %}
+  </div>
+</div>
+{% endblock %}
