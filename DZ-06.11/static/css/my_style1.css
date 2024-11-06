@@ -1,0 +1,43 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+body {
+  background-color: #b3e7f8;
+}
+main {
+  flex: 1;
+}
+footer {
+  background-color: #6aabc3;
+  color: #003366;
+  padding: 20px;
+  text-align: center;
+}
+.my-style-nav {
+  background-color: #6aabc3;
+  color: #003366;
+}
+
+/* Стили для пагинатора */
+.pagination {
+    margin-top: 20px;
+}
+.page-link {
+    color: #043f7b;
+    background-color: #fff;
+    border: 2px solid #7cbbfb;
+    transition: all 1s ease;
+}
+.page-item.active .page-link {
+    background-color: #012c57;
+    border-color: #012c57;
+    color: #fff;
+}
+.page-link:hover {
+    color: #fff;
+    background-color: #012c57;
+    border-color: #012c57;
+}
