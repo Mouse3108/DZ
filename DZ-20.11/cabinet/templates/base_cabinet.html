@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="text-center p-3">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="Avatar" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
+                {% endif %}
+                <h5>{{ user.get_full_name|default:user.username }}</h5>
+            </div>
+            {% include 'cabinet_menu.html' %}
+        </div>
+
+        <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+            {% block cabinet_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-dark text-white py-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <small>{% now "Y" %} Барбершоп "Ирина"</small>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

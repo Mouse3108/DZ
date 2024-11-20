@@ -1,0 +1,60 @@
+{% extends 'base_cabinet.html' %}
+
+{% block title %}{{ page_title }} | {{ block.super }}{% endblock %}
+
+{% block cabinet_content %}
+<h2 class="text-center mb-4">{{ page_title }}</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="d-none d-lg-table-cell">Дата</th>
+                <th>Имя клиента</th>
+                <th class="d-none d-lg-table-cell">Телефон</th>
+                <th class="d-none d-lg-table-cell">Мастер</th>
+                <th class="d-none d-lg-table-cell">Услуги</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for visit in visits %}
+            <tr>
+                <td class="d-none d-lg-table-cell">{{ visit.date|date:"d.m.Y H:i" }}</td>
+                <td>{{ visit.name }}</td>
+                <td class="d-none d-lg-table-cell">
+                <a href="tel:{{ visit.phone }}" class="text-decoration-none">{{ visit.phone }}</a>
+                </td>
+                <td class="d-none d-lg-table-cell">{{ visit.master }}</td>
+                <td class="d-none d-lg-table-cell">
+                {% for service in visit.services.all %}
+                {{ service.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+                </td>
+                <td>{{ visit.get_status_display }}</td>
+                <td class="d-flex gap-2">
+                    <a href="{% url 'cabinet:visit_detail' visit.pk %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a href="{% url 'cabinet:visit_update' visit.pk %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <form method="post" action="{% url 'cabinet:visit_delete' visit.pk %}" class="d-inline" onsubmit="return confirm('Вы уверены?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">Записей не найдено</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

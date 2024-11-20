@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block header %}
+  {% include 'menu.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    <section class="col-12 mb-4">
+      <h2>О нас</h2>
+      <p>
+        Добро пожаловать в барбершоп "Ирина"!
+        Это не просто место, где делают стрижки.
+        Это пространство, где воплощаются мечты об идеальном образе.
+      </p>
+    </section>
+
+    <section id="masters" class="col-12 mb-4">
+      <h2>Наши мастера</h2>
+      <p>
+        Мы с гордостью представляем нашу команду профессионалов,
+        которые не просто меняют внешность, а создают произведения искусства.
+        Наша команда - это сочетание опыта, творческого подхода
+        и безграничной любви к своему делу.
+        Приходите и позвольте нашим мастерам раскрыть ваш внутренний потенциал!
+      </p>
+      <div
+        id="mastersCarouselIndicators"
+        class="carousel slide mx-auto"
+        data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          {% for master in masters %}
+          <button
+            type="button"
+            data-bs-target="#mastersCarouselIndicators"
+            data-bs-slide-to="{{ forloop.counter0 }}"
+            class="{% if forloop.first %}active{% endif %}"
+            aria-current="true"
+            aria-label="Slide {{ forloop.counter }}">
+          </button>
+          {% endfor %}
+        </div>
+        <div class="carousel-inner">
+          {% for master in masters %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img
+              src="{{ master.photo.url }}"
+              class="d-block" style="width: 120px; height: 150px; object-fit: cover;"
+              alt="{{ master.first_name }} {{ master.last_name }}"/>
+            <div class="carousel-caption d-none d-md-block" style="color: red;">
+              <h5>{{ master.first_name }} {{ master.last_name }}</h5>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#mastersCarouselIndicators"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#mastersCarouselIndicators"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+  <section id="orderForm" class="col-12 mb-4">
+      <h2>Запись</h2>
+      <p>
+        Хотите быть неотразимым?
+        Тогда записывайтесь в барбершоп "Ирина" прямо сейчас!
+        Наши профессиональные мастера с радостью помогут вам
+        создать тот образ, о котором вы мечтали.
+        Просто заполните небольшую форму
+        и администратор свяжется с вами для уточнения даты и времени.
+        Ваше совершенство - наша миссия!
+      </p>
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="mb-3">{{ form.as_p }}</div>
+        <button type="submit" class="btn btn-primary">Записаться</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<script>
+  async function fetchServices(masterId) {
+      const url = `/get_services_by_master/${masterId}/`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.services;
+  }
+  
+  function updateServiceOptions(services) {
+      const serviceSelect = document.getElementById("id_services");
+  
+      serviceSelect.innerHTML = "";
+  
+      services.forEach(function (service) {
+          const option = document.createElement("option");
+          option.value = service.id;
+          option.text = service.name;
+          serviceSelect.appendChild(option);
+      });
+  }
+  
+  function setupServiceSelectListener() {
+      const masterSelect = document.getElementById("id_master");
+      
+      masterSelect.addEventListener("change", async function () {
+          const masterId = masterSelect.value;
+          const services = await fetchServices(masterId);
+          updateServiceOptions(services);
+      });
+  }
+  
+  document.addEventListener("DOMContentLoaded", function () {
+      setupServiceSelectListener();
+  });
+  </script>
+
+{% endblock %}
