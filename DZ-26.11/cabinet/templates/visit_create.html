@@ -1,0 +1,62 @@
+{% extends 'base_cabinet.html' %}
+
+{% block title %}Создание заявки | {{ block.super }}{% endblock %}
+
+{% block cabinet_content %}
+<div class="card">
+    <div class="card-header">
+        <h4>Создание новой заявки</h4>
+    </div>
+    <div class="card-body bd-info">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-info">Создать заявку</button>
+            <a href="{% url 'cabinet:all_visits' %}" class="btn btn-info">Отмена</a>
+        </form>
+    </div>
+</div>
+<script>
+  async function fetchServices(masterId) {
+      const url = `/get_services_by_master/${masterId}/`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.services;
+  }
+
+  function updateServiceOptions(services) {
+      const serviceSelect = document.getElementById("id_services");
+
+      serviceSelect.innerHTML = "";
+
+      services.forEach(function (service) {
+          const option = document.createElement("option");
+          option.value = service.id;
+          option.text = service.name;
+          serviceSelect.appendChild(option);
+      });
+  }
+
+  function setupServiceSelectListener() {
+      const masterSelect = document.getElementById("id_master");
+
+      masterSelect.addEventListener("change", async function () {
+          const masterId = masterSelect.value;
+          const services = await fetchServices(masterId);
+          updateServiceOptions(services);
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      setupServiceSelectListener();
+  });
+  </script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<div class="d-grid gap-2 p-3">
+    <a href="{% url 'main' %}" class="btn btn-success align-items-center justify-content-between">На главную</a>
+    {% for item in cabinet_menu %}
+    <a href="{{ item.url }}"
+       class="btn {% if item.active %}btn-primary{% else %}btn-info{% endif %} d-flex align-items-center justify-content-between">
+        <span>
+            <i class="bi {{ item.icon }} me-2"></i>
+            {{ item.title }}
+        </span>
+        {% if item.badge_count > 0 %}
+            <span class="badge rounded-pill bg-success">
+                {{ item.badge_count }}
+            </span>
+        {% endif %}
+    </a>
+    {% endfor %}
+</div>
